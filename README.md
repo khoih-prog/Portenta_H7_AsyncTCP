@@ -30,6 +30,8 @@
   * [AsyncPrinter](#AsyncPrinter)
   * [AsyncTCPbuffer](#AsyncTCPbuffer)
   * [SyncClient](#SyncClient)
+* [Debug Terminal Output Samples](#debug-terminal-output-samples) 
+  * [1. Async_AdvancedWebServer on PORTENTA_H7_M7 using Ethernet](#1-Async_AdvancedWebServer-on-PORTENTA_H7_M7-using-Ethernet)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -182,6 +184,8 @@ It is exactly what it sounds like. This is a standard, synchronous blocking TCP 
 
 ### Debug Terminal Output Samples
 
+#### 1. Async_AdvancedWebServer on PORTENTA_H7_M7 using Ethernet
+
 Following is the debug terminal and screen shot when running example [Async_AdvancedWebServer](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/examples/Ethernet/Async_AdvancedWebServer) on Portenta_H7 Ethernet to demonstrate the operation of Portenta_H7_AsyncWebServer, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
 
 ```
@@ -255,11 +259,13 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 
 1. Based on and modified from [Hristo Gochkov's ESPAsyncTCP](https://github.com/me-no-dev/ESPAsyncTCP). Many thanks to [Hristo Gochkov](https://github.com/me-no-dev) for great [ESPAsyncTCP Library](https://github.com/me-no-dev/ESPAsyncTCP)
 2. Based on [PhilBowles' STM32 AsyncTCP Library](https://github.com/philbowles/STM32AsyncTCP).
+3. Thanks to [rusty-bit](https://github.com/rusty-bit) to initiate the Discussion in [**AsyncWebserver for Portenta H7** #6](https://github.com/khoih-prog/AsyncWebServer_STM32/discussions/6) leading to these [Portenta_H7_AsyncTCP](https://github.com/khoih-prog/Portenta_H7_AsyncTCP) and [Portenta_H7_AsyncWebServer](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer) libraries
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/me-no-dev"><img src="https://github.com/me-no-dev.png" width="100px;" alt="me-no-dev"/><br /><sub><b>⭐️⭐️ Hristo Gochkov</b></sub></a><br /></td>
      <td align="center"><a href="https://github.com/philbowles"><img src="https://github.com/philbowles.png" width="100px;" alt="philbowles"/><br /><sub><b>⭐️ Phil Bowles</b></sub></a><br /></td>
+     <td align="center"><a href="https://github.com/rusty-bit"><img src="https://github.com/rusty-bit.png" width="100px;" alt="rusty-bit"/><br /><sub><b>rusty-bit</b></sub></a><br /></td>
   </tr> 
 </table>
 
