@@ -31,7 +31,7 @@
   * [SyncClient](#SyncClient)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples) 
   * [1. Async_AdvancedWebServer on PORTENTA_H7_M7 using Ethernet](#1-Async_AdvancedWebServer-on-PORTENTA_H7_M7-using-Ethernet)
-  * [1. Async_AdvancedWebServer on PORTENTA_H7_M7 using WiFi](#1-Async_AdvancedWebServer-on-PORTENTA_H7_M7-using-WiFi)
+  * [2. Async_AdvancedWebServer on PORTENTA_H7_M7 using WiFi](#2-Async_AdvancedWebServer-on-PORTENTA_H7_M7-using-WiFi)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
