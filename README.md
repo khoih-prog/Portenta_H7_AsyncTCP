@@ -75,7 +75,7 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
 
 ### Currently supported Boards
 
-1. **Portenta_H7 boards** such as Portenta_H7 Rev2 ABX00042, etc., using [**ArduinoCore-mbed mbed_portenta** core](https://github.com/arduino/ArduinoCore-mbed)
+1. **Portenta_H7 boards** such as Portenta_H7 Rev2 ABX00042, etc., using [**ArduinoCore-mbed mbed_portenta** core](https://github.com/arduino/ArduinoCore-mbed) using `Vision-shield Ethernet` or `Murata WiFi`
 
 
 ---
@@ -119,12 +119,12 @@ Another way to install is to:
 
 #### 1. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -137,9 +137,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.4.1. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 2.5.2. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -189,8 +189,8 @@ Following is the debug terminal and screen shot when running example [Async_Adva
 
 ```
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-Portenta_H7_AsyncTCP v1.0.0
-Portenta_H7_AsyncWebServer v1.0.0
+Portenta_H7_AsyncTCP v1.1.0
+Portenta_H7_AsyncWebServer v1.1.0
 Using mac index = 4
 Connected! IP address: 192.168.2.87
 HTTP EthernetWebServer is @ IP : 192.168.2.87
@@ -203,6 +203,30 @@ You can access the Async Advanced WebServers at the displayed server IP, e.g. `1
     <img src="https://github.com/khoih-prog/Portenta_H7_AsyncTCP/blob/main/pics/Async_AdvancedWebServer.png">
 </p>
 
+
+---
+
+#### 2. Async_AdvancedWebServer on PORTENTA_H7_M7 using WiFi
+
+Following is the debug terminal and screen shot when running example [Async_AdvancedWebServer](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/examples/WiFi/Async_AdvancedWebServer) on Portenta_H7 WiFi to demonstrate the operation of Portenta_H7_AsyncWebServer, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
+
+```
+Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
+Portenta_H7_AsyncTCP v1.1.0
+Portenta_H7_AsyncWebServer v1.1.0
+Connecting to SSID: HueNet1
+SSID: HueNet1
+Local IP Address: 192.168.2.94
+signal strength (RSSI):-31 dBm
+HTTP EthernetWebServer is @ IP : 192.168.2.94
+..........
+```
+
+You can access the Async Advanced WebServers at the displayed server IP, e.g. `192.168.2.94`
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/Portenta_H7_AsyncTCP/blob/main/pics/Async_AdvancedWebServer_WiFi.png">
+</p>
 
 ---
 ---
@@ -238,7 +262,7 @@ Submit issues to: [Portenta_H7_AsyncTCP issues](https://github.com/khoih-prog/Po
 ## TO DO
 
 1. Search for bug and improvement.
-2. Add support to Portenta_H7 `Murata WiFi`
+
 
 ---
 
@@ -246,6 +270,7 @@ Submit issues to: [Portenta_H7_AsyncTCP issues](https://github.com/khoih-prog/Po
 
 1. Add support to Portenta_H7 `Vision-shield Ethernet`
 2. Add Table of Contents
+3. Add support to Portenta_H7 `Murata WiFi`
 
 ---
 ---
