@@ -186,7 +186,7 @@ It is exactly what it sounds like. This is a standard, synchronous blocking TCP 
 
 #### 1. Async_AdvancedWebServer on PORTENTA_H7_M7 using Ethernet
 
-Following is the debug terminal and screen shot when running example [Async_AdvancedWebServer](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/examples/Ethernet/Async_AdvancedWebServer) on Portenta_H7 Ethernet to demonstrate the operation of Portenta_H7_AsyncWebServer, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
+Following is the debug terminal and screen shot when running example [Async_AdvancedWebServer](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/tree/main/examples/Ethernet/Async_AdvancedWebServer) on Portenta_H7 Ethernet to demonstrate the operation of Portenta_H7_AsyncWebServer, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
 
 ```
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
