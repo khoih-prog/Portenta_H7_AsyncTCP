@@ -24,6 +24,7 @@
   * [VS Code & PlatformIO](#vs-code--platformio)
 * [Packages' Patches](#packages-patches)
   * [1. For Portenta_H7 boards using Arduino IDE in Linux](#1-for-portenta_h7-boards-using-arduino-ide-in-linux)
+  * [2. To fix compile error relating to dns_gethostbyname and LwIP stack](#2-to-fix-compile-error-relating-to-dns_gethostbyname-and-lwip-stack)
 * [Orignal documentation](#Orignal-documentation)
   * [AsyncClient and AsyncServer](#AsyncClient-and-AsyncServer)
   * [AsyncPrinter](#AsyncPrinter)
