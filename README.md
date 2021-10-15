@@ -32,6 +32,8 @@
 * [Debug Terminal Output Samples](#debug-terminal-output-samples) 
   * [1. Async_AdvancedWebServer on PORTENTA_H7_M7 using Ethernet](#1-Async_AdvancedWebServer-on-PORTENTA_H7_M7-using-Ethernet)
   * [2. Async_AdvancedWebServer on PORTENTA_H7_M7 using WiFi](#2-Async_AdvancedWebServer-on-PORTENTA_H7_M7-using-WiFi)
+  * [3. AsyncHTTPRequest on PORTENTA_H7_M7 using WiFi](#3-AsyncHTTPRequest-on-PORTENTA_H7_M7-using-WiFi)
+  * [4. AsyncHTTPRequest on PORTENTA_H7_M7 using Ethernet](#4-AsyncHTTPRequest-on-PORTENTA_H7_M7-using-Ethernet)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -148,6 +150,17 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/mbed_portenta/x.yy.zz/portenta_post_install.sh`
 
+#### 2. To fix compile error relating to dns_gethostbyname and LwIP stack
+
+**To be able to compile, run on Portenta_H7 boards**, you have to copy the whole [mbed_portenta Packages_Patches](Packages_Patches/arduino/hardware/mbed_portenta/2.5.2) directory into Arduino mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2). 
+
+Supposing the Arduino mbed_portenta version is 2.5.2. These file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/libraries/SocketWrapper/src/MbedUdp.h`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/libraries/SocketWrapper/src/MbedUdp.cpp`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/cores/arduino/src/mbed/connectivity/lwipstack/include/lwipstack/lwipopts.h`
+
+
 
 ---
 ---
@@ -190,7 +203,7 @@ Following is the debug terminal and screen shot when running example [Async_Adva
 
 ```
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-Portenta_H7_AsyncTCP v1.1.0
+Portenta_H7_AsyncTCP v1.2.0
 Portenta_H7_AsyncWebServer v1.1.0
 Using mac index = 4
 Connected! IP address: 192.168.2.87
@@ -213,7 +226,7 @@ Following is the debug terminal and screen shot when running example [Async_Adva
 
 ```
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-Portenta_H7_AsyncTCP v1.1.0
+Portenta_H7_AsyncTCP v1.2.0
 Portenta_H7_AsyncWebServer v1.1.0
 Connecting to SSID: HueNet1
 SSID: HueNet1
@@ -228,6 +241,94 @@ You can access the Async Advanced WebServers at the displayed server IP, e.g. `1
 <p align="center">
     <img src="https://github.com/khoih-prog/Portenta_H7_AsyncTCP/blob/main/pics/Async_AdvancedWebServer_WiFi.png">
 </p>
+
+---
+
+
+#### 3. AsyncHTTPRequest on PORTENTA_H7_M7 using WiFi
+
+Following is the debug terminal when running example [AsyncHTTPRequest](https://github.com/khoih-prog/Portenta_H7_AsyncHTTPRequest/tree/main/examples/WiFi/AsyncHTTPRequest) on Portenta_H7 WiFi to demonstrate the operation of Portenta_H7_AsyncHTTPRequest, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
+
+```
+Start AsyncHTTPRequest on PORTENTA_H7_M7
+Portenta_H7_AsyncTCP v1.2.0
+Portenta_H7_AsyncHTTPRequest v1.0.0
+Connecting to SSID: HueNet1
+SSID: HueNet1
+Local IP Address: 192.168.2.94
+signal strength (RSSI):-27 dBm
+Request sent
+
+**************************************
+abbreviation: EDT
+client_ip: 104.247.246.186
+datetime: 2021-10-14T21:35:10.868467-04:00
+day_of_week: 4
+day_of_year: 287
+dst: true
+dst_from: 2021-03-14T07:00:00+00:00
+dst_offset: 3600
+dst_until: 2021-11-07T06:00:00+00:00
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1634261710
+utc_datetime: 2021-10-15T01:35:10.868467+00:00
+utc_offset: -04:00
+week_number: 41
+**************************************
+```
+
+---
+
+#### 4. AsyncHTTPRequest on PORTENTA_H7_M7 using Ethernet
+
+Following is the debug terminal when running example [AsyncHTTPRequest](https://github.com/khoih-prog/Portenta_H7_AsyncHTTPRequest/tree/main/examples/Ethernet/AsyncHTTPRequest) on Portenta_H7 Ethernet to demonstrate the operation of Portenta_H7_AsyncHTTPRequest, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
+
+```
+Start AsyncHTTPRequest on PORTENTA_H7_M7
+Portenta_H7_AsyncTCP v1.2.0
+Portenta_H7_AsyncHTTPRequest v1.0.0
+Using mac index = 6
+Connected! IP address: 192.168.2.87
+Request sent
+
+**************************************
+abbreviation: EDT
+client_ip: 104.247.246.186
+datetime: 2021-10-14T21:18:14.913322-04:00
+day_of_week: 4
+day_of_year: 287
+dst: true
+dst_from: 2021-03-14T07:00:00+00:00
+dst_offset: 3600
+dst_until: 2021-11-07T06:00:00+00:00
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1634260694
+utc_datetime: 2021-10-15T01:18:14.913322+00:00
+utc_offset: -04:00
+week_number: 41
+**************************************
+Request sent
+
+**************************************
+abbreviation: EDT
+client_ip: 104.247.246.186
+datetime: 2021-10-14T21:19:14.649325-04:00
+day_of_week: 4
+day_of_year: 287
+dst: true
+dst_from: 2021-03-14T07:00:00+00:00
+dst_offset: 3600
+dst_until: 2021-11-07T06:00:00+00:00
+raw_offset: -18000
+timezone: America/Toronto
+unixtime: 1634260754
+utc_datetime: 2021-10-15T01:19:14.649325+00:00
+utc_offset: -04:00
+week_number: 41
+**************************************
+```
 
 ---
 ---

@@ -14,12 +14,13 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.1.0
+  Version: 1.2.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      06/10/2021 Initial coding for Portenta_H7 (STM32H7) with Vision-Shield Ethernet
   1.1.0   K Hoang      08/10/2021 Add support to Portenta_H7 (STM32H7) using Murata WiFi
+  1.2.0   K Hoang      15/10/2021 Workaround for issue with dns_gethostbyname not-working issue in mbed_portenta v2.5.2
  *****************************************************************************************************************************/
 /*
   Asynchronous TCP library for Espressif MCUs
@@ -67,16 +68,25 @@
 
 #if (ETHERNET_USE_PORTENTA_H7 || USE_ETHERNET_PORTENTA_H7)
   #define SHIELD_TYPE           "Ethernet using Portenta_Ethernet Library"
+  #include <EthernetClient.h>
 #elif (WIFI_USE_PORTENTA_H7 || USE_WIFI_PORTENTA_H7)
   #define SHIELD_TYPE           "Portenta_H7 WiFi"
+  #include <WiFiClient.h>
 #else
   // Default WiFi if not specified
   #define SHIELD_TYPE           "Portenta_H7 WiFi"
+  #include <WiFiClient.h>
 #endif
 
-#define PORTENTA_H7_ASYNC_TCP_VERSION      "Portenta_H7_AsyncTCP v1.1.0"
+#define PORTENTA_H7_ASYNC_TCP_VERSION      "Portenta_H7_AsyncTCP v1.2.0"
+
+#define DEBUG_ESP_ASYNC_TCP       true
+
 
 #include "Portenta_H7_AsyncTCP_Debug.h"
+
+//#include <mbed_config.h>
+#define MBED_CONF_LWIP_IPV4_ENABLED     1
 
 #include <async_config.h>
 #include "IPAddress.h"
@@ -87,9 +97,13 @@ extern "C"
 {
   #include "lwip/ip_addr.h"
   #include "lwip/err.h"
-  #include "lwip/err.h"
   #include "lwip/tcp.h"
   #include "lwip/pbuf.h"
+  
+  //#include "lwip/opt.h"
+  //#include "lwip/inet.h"
+  //#include "lwip/dns.h"
+  //#include "lwip/init.h"
 };
 
 #ifndef PORTENTA_H7_ATCP_UNUSED

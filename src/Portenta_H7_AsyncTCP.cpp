@@ -14,12 +14,13 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.1.0
+  Version: 1.2.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      06/10/2021 Initial coding for Portenta_H7 (STM32H7) with Vision-Shield Ethernet
   1.1.0   K Hoang      08/10/2021 Add support to Portenta_H7 (STM32H7) using Murata WiFi
+  1.2.0   K Hoang      15/10/2021 Workaround for issue with dns_gethostbyname not-working issue in mbed_portenta v2.5.2
  *****************************************************************************************************************************/
  
 /*
@@ -294,8 +295,13 @@ bool AsyncClient::connect(IPAddress ip, uint16_t port, bool secure)
 bool AsyncClient::connect(IPAddress ip, uint16_t port) 
 #endif
 {
-  if (_pcb) //already connected
+  if (_pcb)
+  {
+    //already connected
+    ATCP_LOGDEBUG1("connect: already connected, _pcb =", (uint32_t) _pcb );
+    
     return false;
+  }  
     
   ip_addr_t addr;
   addr.addr = ip;
@@ -306,6 +312,8 @@ bool AsyncClient::connect(IPAddress ip, uint16_t port)
   if (!interface) 
   { 
     //no route to host
+    ATCP_LOGDEBUG("connect: no route to host, NULL interface");
+    
     return false;
   }
 #endif
@@ -315,6 +323,8 @@ bool AsyncClient::connect(IPAddress ip, uint16_t port)
   if (!pcb) 
   { 
     //could not allocate pcb
+    ATCP_LOGDEBUG("connect: could not allocate pcb");
+    
     return false;
   }
 
@@ -329,6 +339,8 @@ bool AsyncClient::connect(IPAddress ip, uint16_t port)
   tcp_err(pcb, &_s_error);
   size_t err = tcp_connect(pcb, &addr, port, (tcp_connected_fn)&_s_connected);
   
+  ATCP_LOGDEBUG1("connect: err =", err);
+  
   return (ERR_OK == err);
 }
 
@@ -338,17 +350,58 @@ bool AsyncClient::connect(const char* host, uint16_t port, bool secure)
 bool AsyncClient::connect(const char* host, uint16_t port)
 #endif
 {
+#if 1
+  #if (ETHERNET_USE_PORTENTA_H7 || USE_ETHERNET_PORTENTA_H7)
+  // Temporary kludge to fix dns_gethostbyname not-working issue in mbed_portenta v2.5.2
+  EthernetClient thisClient;
+  #else
+  WiFiClient thisClient;
+  #endif
+    
+  thisClient.connect(host, port);
+    
+  IPAddress ipAddress = thisClient.remoteIP();
+  
+  ATCP_LOGDEBUG1("thisClient.connect: IP =", ipAddress);
+  
+  if ((uint32_t) ipAddress) 
+  {
+    bool returnValue;
+#if ASYNC_TCP_SSL_ENABLED
+    returnValue = connect(ipAddress, port, secure);
+#else
+    returnValue = connect(ipAddress, port);
+#endif
+
+    ATCP_LOGDEBUG3("connect: IP =", ipAddress, ", returnValue = ", returnValue ? "TRUE" : "FALSE");
+    
+    return returnValue;
+  }
+  
+  ATCP_LOGDEBUG("connect: error No IP");
+  
+  return false;
+  
+#else
+
+  // dns_gethostbyname and lwip not-working for mbed_portenta v2.5.2
+
   ip_addr_t addr;
+  
   err_t err = dns_gethostbyname(host, &addr, (dns_found_callback)&_s_dns_found, this);
-  //  printf("CNX GHBN err: %s(%ld)\n", errorToString(err), err);
   
   if (err == ERR_OK) 
   {
+    bool returnValue;
 #if ASYNC_TCP_SSL_ENABLED
-    return connect(IPAddress(addr.addr), port, secure);
+    returnValue = connect(IPAddress(addr.addr), port, secure);
 #else
-    return connect(IPAddress(addr.addr), port);
+    returnValue = connect(IPAddress(addr.addr), port);
 #endif
+
+    ATCP_LOGDEBUG3("connect: dns_gethostbyname => IP =", IPAddress(addr.addr), ", returnValue = ", returnValue ? "TRUE" : "FALSE");
+    
+    return returnValue;
   } 
   else if (err == ERR_INPROGRESS) 
   {
@@ -358,17 +411,21 @@ bool AsyncClient::connect(const char* host, uint16_t port)
 #endif
     _connect_port = port;
     
+    ATCP_LOGDEBUG1("connect: OK, _connect_port = ", _connect_port);
+    
     return true;
   }
   
+  ATCP_LOGDEBUG1("connect: error = ", err);
+  
   return false;
+#endif  
 }
 
 AsyncClient& AsyncClient::operator=(const AsyncClient& other) 
 {
   if (_pcb)
   {
-    //ASYNC_TCP_DEBUG("operator=[%u]: Abandoned _pcb(0x%" PRIXPTR ") forced close.\n", getConnectionId(), uintptr_t(_pcb));
     _close();
   }
   
@@ -483,19 +540,8 @@ size_t AsyncClient::write(const char* data, size_t size, uint8_t apiflags)
   return will_send;
 }
 
-void hexdump(const char* data, size_t size)
-{
-  //printf("ADDING len=%d room=%d",size);
-
-  for (size_t i = 0; i < size; i++)
-    printf("%02x %c\n", data[i], data[i]);
-
-  printf("ADDÈD\n");
-}
-
 size_t AsyncClient::add(const char* data, size_t size, uint8_t apiflags) 
 {
-  //  hexdump(data,size);
   if (!_pcb || size == 0 || data == NULL)
     return 0;
     
@@ -523,8 +569,6 @@ size_t AsyncClient::add(const char* data, size_t size, uint8_t apiflags)
   size_t will_send = (room < size) ? room : size;
   err_t err = tcp_write(_pcb, data, will_send, apiflags);
 
-  //printf("_add: tcp_write() returned err: %s(%ld)\n", errorToString(err), err);
-
   if (err != ERR_OK) 
   {
     return 0;
@@ -543,7 +587,6 @@ bool AsyncClient::send()
 #endif
 
   err_t err = tcp_output(_pcb);
-  //  printf("send: tcp_output() returned err: %s(%ld)\n", errorToString(err), err);
 
   if (err == ERR_OK) 
   {
@@ -584,7 +627,9 @@ void AsyncClient::_connected(std::shared_ptr<ACErrorTracker>& errorTracker, void
   // After all, the API does allow for an err != ERR_OK.
   if (NULL == pcb || ERR_OK != err)
   {
-    //ASYNC_TCP_DEBUG("_connected[%u]:%s err: %s(%ld)\n", errorTracker->getConnectionId(), ((NULL == pcb) ? " NULL == pcb!," : ""), errorToString(err), err);
+    ATCP_LOGDEBUG3("_connected: ID =", errorTracker->getConnectionId(), ", pcb =", ((NULL == pcb) ? " NULL == pcb!," : "") );
+    ATCP_LOGDEBUG3("errorToString =", errorToString(err), ", err =", err );
+    
     errorTracker->setCloseError(err);
     errorTracker->setErrored(EE_CONNECTED_CB);
     _pcb = reinterpret_cast<tcp_pcb*>(pcb);
@@ -657,7 +702,8 @@ void AsyncClient::_close()
     } 
     else
     {
-      //ASYNC_TCP_DEBUG("_close[%u]: abort() called for AsyncClient 0x%" PRIXPTR "\n", getConnectionId(), uintptr_t(this));
+      ATCP_LOGDEBUG3("_close : ID =", getConnectionId(), ", abort() called for AsyncClient 0x", uintptr_t(this));
+      
       abort();
     }
     
@@ -672,7 +718,9 @@ void AsyncClient::_close()
 
 void AsyncClient::_error(err_t err)
 {
-  //ASYNC_TCP_DEBUG("_error[%u]:%s err: %s(%ld)\n", getConnectionId(), ((NULL == _pcb) ? " NULL == _pcb!," : ""), errorToString(err), err);
+  ATCP_LOGDEBUG3("_error: ID =", getConnectionId(), ", _pcb =", ((NULL == _pcb) ? " NULL == _pcb!," : "") );
+  ATCP_LOGDEBUG3("errorToString =", errorToString(err), ", err =", err );
+  
 
   if (_pcb) 
   {
@@ -714,7 +762,8 @@ void AsyncClient::_sent(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* 
   _tx_unacked_len -= len;
   _tx_acked_len += len;
 
-  //ASYNC_TCP_DEBUG("_sent[%u]: %4u, unacked=%4u, acked=%4u, space=%4u\n", errorTracker->getConnectionId(), len, _tx_unacked_len, _tx_acked_len, space());
+  ATCP_LOGDEBUG3("_sent: ID =", errorTracker->getConnectionId(), ", len =", len);
+  ATCP_LOGDEBUG3("unacked =", _tx_unacked_len, ", acked =", _tx_acked_len);
 
   if (_tx_unacked_len == 0) 
   {
@@ -742,8 +791,8 @@ void AsyncClient::_recv(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* 
   // https://www.nongnu.org/lwip/2_1_x/tcp_8h.html#a780cfac08b02c66948ab94ea974202e8
   if (NULL == pcb || ERR_OK != err)
   {
-    //ASYNC_TCP_DEBUG("_recv[%u]:%s err: %s(%ld)\n", errorTracker->getConnectionId(), ((NULL == pcb) ? " NULL == pcb!," : ""), errorToString(err), err);
-    //ASYNC_TCP_ASSERT(ERR_ABRT != err);
+    ATCP_LOGDEBUG3("_recv: ID =", errorTracker->getConnectionId(), ", pcb =", ((NULL == pcb) ? " NULL == pcb!," : "") );
+    ATCP_LOGDEBUG3("errorToString =", errorToString(err), ", err =", err );
 
     errorTracker->setCloseError(err);
     errorTracker->setErrored(EE_RECV_CB);
@@ -781,7 +830,8 @@ void AsyncClient::_recv(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* 
 
   if (pb == NULL) 
   {
-    //ASYNC_TCP_DEBUG("_recv[%u]: pb == NULL! Closing... %ld\n", errorTracker->getConnectionId(), err);
+    ATCP_LOGDEBUG3("_recv: ID =", errorTracker->getConnectionId(), "pb == NULL! Closing... err =", err );
+    
     _close();
     
     return;
@@ -792,14 +842,16 @@ void AsyncClient::_recv(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* 
 #if ASYNC_TCP_SSL_ENABLED
   if (_pcb_secure)
   {
-    //ASYNC_TCP_DEBUG("_recv[%u]: %d\n", getConnectionId(), pb->tot_len);
+    ATCP_LOGDEBUG3("_recv: ID =", getConnectionId(), "pb->tot_len =", pb->tot_len);    
+    
     int read_bytes = tcp_ssl_read(pcb, pb);
     
     if (read_bytes < 0) 
     {
       if (read_bytes != SSL_CLOSE_NOTIFY)
       {
-        //ASYNC_TCP_DEBUG("_recv[%u] err: %d\n", getConnectionId(), read_bytes);
+        ATCP_LOGDEBUG3("_recv: ID =", getConnectionId(), "pb->tot_len =", read_bytes); 
+        
         _close();
       }
     }
@@ -829,8 +881,6 @@ void AsyncClient::_recv(std::shared_ptr<ACErrorTracker>& errorTracker, tcp_pcb* 
     pbuf *b = pb;
     pb = b->next;
     b->next = NULL;
-
-    //ASYNC_TCP_DEBUG("_recv[%u]: %d%s\n", errorTracker->getConnectionId(), b->len, (b->flags&PBUF_FLAG_PUSH)?", PBUF_FLAG_PUSH":"");
 
     if (_pb_cb) 
     {
@@ -1156,7 +1206,11 @@ uint8_t AsyncClient::state()
 bool AsyncClient::connected() 
 {
   if (!_pcb)
+  {
+    ATCP_LOGDEBUG("connected: error NULL pcb");
+    
     return false;
+  }
     
 #if ASYNC_TCP_SSL_ENABLED
   return _pcb->state == 4 && _handshake_done;
@@ -1168,7 +1222,11 @@ bool AsyncClient::connected()
 bool AsyncClient::connecting() 
 {
   if (!_pcb)
+  {
+    ATCP_LOGDEBUG("connecting: error NULL pcb");
+    
     return false;
+  }
     
   return _pcb->state > 0 && _pcb->state < 4;
 }
@@ -1176,7 +1234,11 @@ bool AsyncClient::connecting()
 bool AsyncClient::disconnecting() 
 {
   if (!_pcb)
+  {
+    ATCP_LOGDEBUG("disconnecting: error NULL pcb");
+    
     return false;
+  }
     
   return _pcb->state > 4 && _pcb->state < 10;
 }
@@ -1184,21 +1246,39 @@ bool AsyncClient::disconnecting()
 bool AsyncClient::disconnected() 
 {
   if (!_pcb)
-    return true;
+  {
+    ATCP_LOGDEBUG("disconnected: error NULL pcb");
     
+    return false;
+  }
+  
   return _pcb->state == 0 || _pcb->state == 10;
 }
 
 bool AsyncClient::freeable() 
 {
   if (!_pcb)
-    return true;
+  {
+    ATCP_LOGDEBUG("freeable: error NULL pcb");
+    
+    return false;
+  }
     
   return _pcb->state == 0 || _pcb->state > 4;
 }
 
 bool AsyncClient::canSend() 
 {
+  if (_pcb_busy)
+  {
+    ATCP_LOGDEBUG("canSend: error _pcb_busy");
+  }
+  
+  if (!(space() > 0))
+  {
+    ATCP_LOGDEBUG("canSend: space() <= 0");
+  }
+  
   return !_pcb_busy && (space() > 0);
 }
 
@@ -1540,8 +1620,6 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
     // An error code if there has been an error accepting. Only return ERR_ABRT
     // if you have called tcp_abort from within the callback function!
     // eg. 2.1.0 could call with error on failure to allocate pcb.
-    //ASYNC_TCP_DEBUG("_accept:%s err: %ld\n", ((NULL == pcb) ? " NULL == pcb!," : ""), err);
-    //ASYNC_TCP_ASSERT(ERR_ABRT != err);
     
 #ifdef DEBUG_MORE
     incEventCount(EE_ACCEPT_CB);
@@ -1569,7 +1647,7 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
         
         if (!new_item)
         {
-          //ASYNC_TCP_DEBUG("### malloc new pending failed!\n");
+          ATCP_LOGDEBUG("### malloc new pending failed!");
 
           if (tcp_close(pcb) != ERR_OK) 
           {
@@ -1580,7 +1658,8 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
           return ERR_OK;
         }
         
-        //ASYNC_TCP_DEBUG("### put to wait: %d\n", _clients_waiting);
+        ATCP_LOGDEBUG1("### put to wait:", _clients_waiting);
+        
         new_item->pcb = pcb;
         new_item->pb = NULL;
         new_item->next = NULL;
@@ -1609,7 +1688,7 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
         
         if (c)
         {
-          //ASYNC_TCP_DEBUG("_accept[%u]: SSL connected\n", c->getConnectionId());
+          ATCP_LOGDEBUG1("_accept SSL connected: ID =", c->getConnectionId());
 
           c->onConnect([this](void * arg, AsyncClient * c) 
           {
@@ -1618,7 +1697,7 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
         } 
         else
         {
-          //ASYNC_TCP_DEBUG("_accept[_ssl_ctx]: new AsyncClient() failed, connection aborted!\n");
+          ATCP_LOGDEBUG("_accept[_ssl_ctx]: new AsyncClient() failed, connection aborted!");
 
           if (tcp_close(pcb) != ERR_OK) 
           {
@@ -1647,14 +1726,15 @@ err_t AsyncServer::_accept(tcp_pcb* pcb, err_t err)
         }, this);
 #endif
 
-        //ASYNC_TCP_DEBUG("_accept[%u]: connected\n", errorTracker->getConnectionId());
+        ATCP_LOGDEBUG1("_accept: connected ID = ", errorTracker->getConnectionId());
+        
         _connect_cb(_connect_cb_arg, c);
         
         return errorTracker->getCallbackCloseError();
       } 
       else 
       {
-        //ASYNC_TCP_DEBUG("_accept: new AsyncClient() failed, connection aborted!\n");
+        ATCP_LOGDEBUG("_accept: new AsyncClient() failed, connection aborted!");
         if (tcp_close(pcb) != ERR_OK) 
         {
           tcp_abort(pcb);
@@ -1704,7 +1784,8 @@ err_t AsyncServer::_poll(tcp_pcb* pcb)
       p = b;
     }
     
-    //ASYNC_TCP_DEBUG("### remove from wait: %d\n", _clients_waiting);
+    ATCP_LOGDEBUG1("### remove from wait: ", _clients_waiting);
+    
     AsyncClient *c = new (std::nothrow) AsyncClient(pcb, _ssl_ctx);
     
     if (c) 
@@ -1733,7 +1814,7 @@ err_t AsyncServer::_recv(struct tcp_pcb *pcb, struct pbuf *pb, err_t err)
 
   if (!pb)
   {
-    //ASYNC_TCP_DEBUG("### close from wait: %d\n", _clients_waiting);
+    ATCP_LOGDEBUG1("### close from wait: ", _clients_waiting);
 
     p = _pending;
 
@@ -1771,7 +1852,7 @@ err_t AsyncServer::_recv(struct tcp_pcb *pcb, struct pbuf *pb, err_t err)
   } 
   else
   {
-    //ASYNC_TCP_DEBUG("### wait _recv: %u %d\n", pb->tot_len, _clients_waiting);
+    ATCP_LOGDEBUG3("### wait _recv: tot_len =", pb->tot_len, ", _clients_waiting =", _clients_waiting);
 
     p = _pending;
     

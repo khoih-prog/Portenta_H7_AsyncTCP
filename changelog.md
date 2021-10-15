@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.2.0](#Releases-v120)
   * [Releases v1.1.0](#Releases-v110)
   * [Initial Releases v1.0.0](#Initial-Releases-v100)
 
@@ -18,6 +19,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.2.0
+
+1. Workaround for issue with `dns_gethostbyname` not-working issue in `mbed_portenta v2.5.2-`
+2. To prepare for new library [Portenta_H7_AsyncHTTPRequest](https://github.com/khoih-prog/Portenta_H7_AsyncHTTPRequest)
 
 ### Releases v1.1.0
 
