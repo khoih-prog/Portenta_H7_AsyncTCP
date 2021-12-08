@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.3.0](#Releases-v130)
   * [Releases v1.2.0](#Releases-v120)
   * [Releases v1.1.0](#Releases-v110)
   * [Initial Releases v1.0.0](#Initial-Releases-v100)
@@ -19,6 +20,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.3.0
+
+1. Fix compile error issue in mbed_portenta v2.6.1+
 
 ### Releases v1.2.0
 
