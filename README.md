@@ -6,7 +6,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/Portenta_H7_AsyncTCP.svg)](http://github.com/khoih-prog/Portenta_H7_AsyncTCP/issues)
 
 
-<a href="https://www.buymeacoffee.com/khoihprog6" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
 ---
 ---
@@ -90,7 +91,7 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
- 2. [`ArduinoCore-mbed mbed_portenta core 2.7.2+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+ 2. [`ArduinoCore-mbed mbed_portenta core 3.1.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 
 ---
 ---
@@ -115,7 +116,7 @@ Another way to install is to:
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**Portenta_H7_AsyncTCP** library](https://platformio.org/lib/show/12919/Portenta_H7_AsyncTCP) by using [Library Manager](https://platformio.org/lib/show/12919/Portenta_H7_AsyncTCP/installation). Search for **Portenta_H7_AsyncTCP** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**Portenta_H7_AsyncTCP** library](https://registry.platformio.org/libraries/khoih-prog/Portenta_H7_AsyncTCP) by using [Library Manager](https://registry.platformio.org/libraries/khoih-prog/Portenta_H7_AsyncTCP/installation). Search for **Portenta_H7_AsyncTCP** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
@@ -125,12 +126,12 @@ Another way to install is to:
 
 #### 1. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.1.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.1.1/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.1.1
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -143,9 +144,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.6.1. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 3.1.1. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.1.1/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -157,7 +158,7 @@ This file must be copied into the directory:
 #### 2. To fix compile error relating to dns_gethostbyname and LwIP stack
 
 
-#### Notes: Only for cores v2.5.2-. This fix is not necessary for core v2.6.1+
+#### Notes: Only for cores v2.5.2-. This fix is not necessary for core v3.1.1+
 
 **To be able to compile, run on Portenta_H7 boards**, you have to copy the whole [mbed_portenta Packages_Patches](Packages_Patches/arduino/hardware/mbed_portenta/2.5.2) directory into Arduino mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2). 
 
@@ -210,8 +211,8 @@ Following is the debug terminal and screen shot when running example [Async_Adva
 
 ```
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-Portenta_H7_AsyncTCP v1.3.0
-Portenta_H7_AsyncWebServer v1.2.0
+Portenta_H7_AsyncTCP v1.3.1
+Portenta_H7_AsyncWebServer v1.2.1
 Using mac index = 4
 Connected! IP address: 192.168.2.87
 HTTP EthernetWebServer is @ IP : 192.168.2.87
@@ -233,8 +234,8 @@ Following is the debug terminal and screen shot when running example [Async_Adva
 
 ```
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-Portenta_H7_AsyncTCP v1.3.0
-Portenta_H7_AsyncWebServer v1.2.0
+Portenta_H7_AsyncTCP v1.3.1
+Portenta_H7_AsyncWebServer v1.2.1
 Connecting to SSID: HueNet1
 SSID: HueNet1
 Local IP Address: 192.168.2.94
@@ -258,8 +259,8 @@ Following is the debug terminal when running example [AsyncHTTPRequest](https://
 
 ```
 Start AsyncHTTPRequest on PORTENTA_H7_M7
-Portenta_H7_AsyncTCP v1.3.0
-Portenta_H7_AsyncHTTPRequest v1.0.0
+Portenta_H7_AsyncTCP v1.3.1
+Portenta_H7_AsyncHTTPRequest v1.2.0
 Connecting to SSID: HueNet1
 SSID: HueNet1
 Local IP Address: 192.168.2.94
@@ -293,8 +294,8 @@ Following is the debug terminal when running example [AsyncHTTPRequest](https://
 
 ```
 Start AsyncHTTPRequest on PORTENTA_H7_M7
-Portenta_H7_AsyncTCP v1.3.0
-Portenta_H7_AsyncHTTPRequest v1.0.0
+Portenta_H7_AsyncTCP v1.3.1
+Portenta_H7_AsyncHTTPRequest v1.2.0
 Using mac index = 6
 Connected! IP address: 192.168.2.87
 Request sent
@@ -387,6 +388,8 @@ Submit issues to: [Portenta_H7_AsyncTCP issues](https://github.com/khoih-prog/Po
 ### Contributions and Thanks
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
+
+---
 
 ### Contributions and Thanks
 

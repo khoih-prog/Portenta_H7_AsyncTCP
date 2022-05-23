@@ -9,7 +9,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Portenta_H7_ASYNC_TCP
   Licensed under MIT license
  
-  Version: 1.3.0
+  Version: 1.3.1
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -17,6 +17,7 @@
   1.1.0   K Hoang      08/10/2021 Add support to Portenta_H7 (STM32H7) using Murata WiFi
   1.2.0   K Hoang      15/10/2021 Workaround for issue with dns_gethostbyname not-working issue in mbed_portenta v2.5.2
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
+  1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
  *****************************************************************************************************************************/
 
 #pragma once
@@ -57,11 +58,15 @@
 #define ATCP_LOGERROR2(x,y,z)    if(_PORTENTA_H7_ATCP_LOGLEVEL_>0) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINT(y); ATCP_PRINT_SP; ATCP_PRINTLN(z); }
 #define ATCP_LOGERROR3(x,y,z,w)  if(_PORTENTA_H7_ATCP_LOGLEVEL_>0) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINT(y); ATCP_PRINT_SP; ATCP_PRINT(z); ATCP_PRINT_SP; ATCP_PRINTLN(w); }
 
+/////////////////////////////////////////////////////////
+
 #define ATCP_LOGWARN(x)          if(_PORTENTA_H7_ATCP_LOGLEVEL_>1) { ATCP_PRINT_MARK; ATCP_PRINTLN(x); }
 #define ATCP_LOGWARN0(x)         if(_PORTENTA_H7_ATCP_LOGLEVEL_>1) { ATCP_PRINT(x); }
 #define ATCP_LOGWARN1(x,y)       if(_PORTENTA_H7_ATCP_LOGLEVEL_>1) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINTLN(y); }
 #define ATCP_LOGWARN2(x,y,z)     if(_PORTENTA_H7_ATCP_LOGLEVEL_>1) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINT(y); ATCP_PRINT_SP; ATCP_PRINTLN(z); }
 #define ATCP_LOGWARN3(x,y,z,w)   if(_PORTENTA_H7_ATCP_LOGLEVEL_>1) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINT(y); ATCP_PRINT_SP; ATCP_PRINT(z); ATCP_PRINT_SP; ATCP_PRINTLN(w); }
+
+/////////////////////////////////////////////////////////
 
 #define ATCP_LOGINFO(x)          if(_PORTENTA_H7_ATCP_LOGLEVEL_>2) { ATCP_PRINT_MARK; ATCP_PRINTLN(x); }
 #define ATCP_LOGINFO0(x)         if(_PORTENTA_H7_ATCP_LOGLEVEL_>2) { ATCP_PRINT(x); }
@@ -69,10 +74,14 @@
 #define ATCP_LOGINFO2(x,y,z)     if(_PORTENTA_H7_ATCP_LOGLEVEL_>2) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINT(y); ATCP_PRINT_SP; ATCP_PRINTLN(z); }
 #define ATCP_LOGINFO3(x,y,z,w)   if(_PORTENTA_H7_ATCP_LOGLEVEL_>2) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINT(y); ATCP_PRINT_SP; ATCP_PRINT(z); ATCP_PRINT_SP; ATCP_PRINTLN(w); }
 
+/////////////////////////////////////////////////////////
+
 #define ATCP_LOGDEBUG(x)         if(_PORTENTA_H7_ATCP_LOGLEVEL_>3) { ATCP_PRINT_MARK; ATCP_PRINTLN(x); }
 #define ATCP_LOGDEBUG0(x)        if(_PORTENTA_H7_ATCP_LOGLEVEL_>3) { ATCP_PRINT(x); }
 #define ATCP_LOGDEBUG1(x,y)      if(_PORTENTA_H7_ATCP_LOGLEVEL_>3) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINTLN(y); }
 #define ATCP_LOGDEBUG2(x,y,z)    if(_PORTENTA_H7_ATCP_LOGLEVEL_>3) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINT(y); ATCP_PRINT_SP; ATCP_PRINTLN(z); }
 #define ATCP_LOGDEBUG3(x,y,z,w)  if(_PORTENTA_H7_ATCP_LOGLEVEL_>3) { ATCP_PRINT_MARK; ATCP_PRINT(x); ATCP_PRINT_SP; ATCP_PRINT(y); ATCP_PRINT_SP; ATCP_PRINT(z); ATCP_PRINT_SP; ATCP_PRINTLN(w); }
+
+/////////////////////////////////////////////////////////
 
 #endif    //PORTENTA_H7_ASYNC_TCP_DEBUG_H

@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.3.1](#Releases-v131)
   * [Releases v1.3.0](#Releases-v130)
   * [Releases v1.2.0](#Releases-v120)
   * [Releases v1.1.0](#Releases-v110)
@@ -20,6 +21,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.3.1
+
+1. Fix typo in `library.json`
+2. Update `Packages' Patches`
 
 ### Releases v1.3.0
 
