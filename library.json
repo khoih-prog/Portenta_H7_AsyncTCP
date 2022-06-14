@@ -31,7 +31,7 @@
   },
   "license": "LGPL-3.0",
   "frameworks": "*",
-  "platforms": "mbed_portenta",
+  "platforms": "ststm32",
   "examples": "examples/*/*/*.ino",
   "headers": "Portenta_H7_AsyncTCP.h"
 }
