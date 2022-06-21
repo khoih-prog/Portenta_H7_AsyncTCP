@@ -83,13 +83,13 @@
   #include <WiFiClient.h>
 #endif
 
-#define PORTENTA_H7_ASYNC_TCP_VERSION            "Portenta_H7_AsyncTCP v1.3.1"
+#define PORTENTA_H7_ASYNC_TCP_VERSION            "Portenta_H7_AsyncTCP v1.3.2"
 
 #define PORTENTA_H7_ASYNC_TCP_VERSION_MAJOR      1
 #define PORTENTA_H7_ASYNC_TCP_VERSION_MINOR      3
-#define PORTENTA_H7_ASYNC_TCP_VERSION_PATCH      1
+#define PORTENTA_H7_ASYNC_TCP_VERSION_PATCH      2
 
-#define PORTENTA_H7_ASYNC_TCP_VERSION_INT        1003001
+#define PORTENTA_H7_ASYNC_TCP_VERSION_INT        1003002
 
 
 #define DEBUG_ESP_ASYNC_TCP       true
