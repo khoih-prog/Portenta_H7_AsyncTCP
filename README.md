@@ -211,7 +211,7 @@ Following is the debug terminal and screen shot when running example [Async_Adva
 
 ```
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-Portenta_H7_AsyncTCP v1.3.1
+Portenta_H7_AsyncTCP v1.3.2
 Portenta_H7_AsyncWebServer v1.2.1
 Using mac index = 4
 Connected! IP address: 192.168.2.87
@@ -234,7 +234,7 @@ Following is the debug terminal and screen shot when running example [Async_Adva
 
 ```
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-Portenta_H7_AsyncTCP v1.3.1
+Portenta_H7_AsyncTCP v1.3.2
 Portenta_H7_AsyncWebServer v1.2.1
 Connecting to SSID: HueNet1
 SSID: HueNet1
@@ -259,7 +259,7 @@ Following is the debug terminal when running example [AsyncHTTPRequest](https://
 
 ```
 Start AsyncHTTPRequest on PORTENTA_H7_M7
-Portenta_H7_AsyncTCP v1.3.1
+Portenta_H7_AsyncTCP v1.3.2
 Portenta_H7_AsyncHTTPRequest v1.2.0
 Connecting to SSID: HueNet1
 SSID: HueNet1
@@ -294,7 +294,7 @@ Following is the debug terminal when running example [AsyncHTTPRequest](https://
 
 ```
 Start AsyncHTTPRequest on PORTENTA_H7_M7
-Portenta_H7_AsyncTCP v1.3.1
+Portenta_H7_AsyncTCP v1.3.2
 Portenta_H7_AsyncHTTPRequest v1.2.0
 Using mac index = 6
 Connected! IP address: 192.168.2.87
@@ -397,6 +397,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 2. Based on [PhilBowles' STM32 AsyncTCP Library](https://github.com/philbowles/STM32AsyncTCP).
 3. Thanks to [rusty-bit](https://github.com/rusty-bit) to initiate the Discussion in [**AsyncWebserver for Portenta H7** #6](https://github.com/khoih-prog/AsyncWebServer_STM32/discussions/6) leading to these [Portenta_H7_AsyncTCP](https://github.com/khoih-prog/Portenta_H7_AsyncTCP) and [Portenta_H7_AsyncWebServer](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer) libraries
 4. Thanks to [Jeremy Ellis](https://github.com/hpssjellis) to test and report the compile error issue with mbed_portenta core v2.6.1, leading to v1.3.0
+5. Thanks to [Maximilian Gerhardt](https://github.com/maxgerhardt) for PR [Fix platform value for Portenta #1](https://github.com/khoih-prog/Portenta_H7_AsyncTCP/pull/1), leading to v1.3.2
 
 <table>
   <tr>
@@ -404,6 +405,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
     <td align="center"><a href="https://github.com/philbowles"><img src="https://github.com/philbowles.png" width="100px;" alt="philbowles"/><br /><sub><b>⭐️ Phil Bowles</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/rusty-bit"><img src="https://github.com/rusty-bit.png" width="100px;" alt="rusty-bit"/><br /><sub><b>rusty-bit</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/hpssjellis"><img src="https://github.com/hpssjellis.png" width="100px;" alt="hpssjellis"/><br /><sub><b>Jeremy Ellis</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/maxgerhardt"><img src="https://github.com/maxgerhardt.png" width="100px;" alt="maxgerhardt"/><br /><sub><b>Maximilian Gerhardt</b></sub></a><br /></td>
   </tr> 
 </table>
 

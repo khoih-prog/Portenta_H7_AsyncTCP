@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.3.2](#Releases-v132)
   * [Releases v1.3.1](#Releases-v131)
   * [Releases v1.3.0](#Releases-v130)
   * [Releases v1.2.0](#Releases-v120)
@@ -21,6 +22,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.3.2
+
+1. Fix PIO platform in `library.json`
 
 ### Releases v1.3.1
 
