@@ -14,7 +14,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.3.2
+  Version: 1.4.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,10 +24,14 @@
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
   1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
   1.3.2   K Hoang      21/06/2022 Fix PIO platform in `library.json`
+  1.4.0   K Hoang      26/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
  *****************************************************************************************************************************/
 
 #ifndef _DEBUG_PRINT_MACROS_H
 #define _DEBUG_PRINT_MACROS_H
+
+/////////////////////////////////////////////
+
 // Some customizable print macros to suite the debug needs de jour.
 
 // Debug macros
@@ -36,9 +40,7 @@
 // This value is resolved at compile time.
 #define _FILENAME_ strrchr("/" __FILE__, '/')
 
-//#define DEBUG_ESP_ASYNC_TCP 1
-// #define DEBUG_ESP_TCP_SSL 1
-//#define DEBUG_ESP_PORT Serial
+/////////////////////////////////////////////
 
 #if defined(DEBUG_ESP_PORT) && !defined(DEBUG_TIME_STAMP_FMT)
   #define DEBUG_TIME_STAMP_FMT    "%06u.%03u "
@@ -59,6 +61,8 @@
   }
 #endif
 
+/////////////////////////////////////////////
+
 #if defined(DEBUG_ESP_PORT) && !defined(DEBUG_GENERIC)
   #define DEBUG_GENERIC( module, format, ... ) \
     do { \
@@ -67,6 +71,8 @@
     } while(false)
 #endif
 
+/////////////////////////////////////////////
+
 #if defined(DEBUG_ESP_PORT) && !defined(DEBUG_GENERIC_P)
   #define DEBUG_GENERIC_P( module, format, ... ) \
     do { \
@@ -74,6 +80,8 @@
       DEBUG_ESP_PORT.printf_P(PSTR( DEBUG_TIME_STAMP_FMT module " " format ), st.whole, st.dec, ##__VA_ARGS__ ); \
     } while(false)
 #endif
+
+/////////////////////////////////////////////
 
 #if defined(DEBUG_GENERIC) && !defined(ASSERT_GENERIC)
   #define ASSERT_GENERIC( a, module ) \
@@ -85,6 +93,8 @@
     } while(false)
 #endif
 
+/////////////////////////////////////////////
+
 #if defined(DEBUG_GENERIC_P) && !defined(ASSERT_GENERIC_P)
   #define ASSERT_GENERIC_P( a, module ) \
     do { \
@@ -95,36 +105,54 @@
     } while(false)
 #endif
 
+/////////////////////////////////////////////
+
 #ifndef DEBUG_GENERIC
   #define DEBUG_GENERIC(...) do { (void)0;} while(false)
 #endif
+
+/////////////////////////////////////////////
 
 #ifndef DEBUG_GENERIC_P
   #define DEBUG_GENERIC_P(...) do { (void)0;} while(false)
 #endif
 
+/////////////////////////////////////////////
+
 #ifndef ASSERT_GENERIC
   #define ASSERT_GENERIC(...) do { (void)0;} while(false)
 #endif
+
+/////////////////////////////////////////////
 
 #ifndef ASSERT_GENERIC_P
   #define ASSERT_GENERIC_P(...) do { (void)0;} while(false)
 #endif
 
+/////////////////////////////////////////////
+
 #ifndef DEBUG_ESP_PRINTF
   #define DEBUG_ESP_PRINTF( format, ...) DEBUG_GENERIC_P("[%s]", format, &_FILENAME_[1], ##__VA_ARGS__)
 #endif
+
+/////////////////////////////////////////////
 
 #if defined(DEBUG_ESP_ASYNC_TCP) && !defined(ASYNC_TCP_DEBUG)
   #define ASYNC_TCP_DEBUG( format, ...) DEBUG_GENERIC_P("[ASYNC_TCP]", format, ##__VA_ARGS__)
 #endif
 
+/////////////////////////////////////////////
+
 #ifndef ASYNC_TCP_ASSERT
   #define ASYNC_TCP_ASSERT( a ) ASSERT_GENERIC_P( (a), "[ASYNC_TCP]")
 #endif
 
+/////////////////////////////////////////////
+
 #if defined(DEBUG_ESP_TCP_SSL) && !defined(TCP_SSL_DEBUG)
   #define TCP_SSL_DEBUG( format, ...) DEBUG_GENERIC_P("[TCP_SSL]", format, ##__VA_ARGS__)
 #endif
+
+/////////////////////////////////////////////
 
 #endif //_DEBUG_PRINT_MACROS_H

@@ -14,7 +14,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.3.2
+  Version: 1.4.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
   1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
   1.3.2   K Hoang      21/06/2022 Fix PIO platform in `library.json`
+  1.4.0   K Hoang      26/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
  *****************************************************************************************************************************/
 /*
   Asynchronous TCP library for Espressif MCUs
@@ -50,10 +51,14 @@
   #define _PORTENTA_H7_ATCP_LOGLEVEL_     1
 #endif
 
+/////////////////////////////////////////////
+
 #include "Arduino.h"
 #include "SyncClient.h"
 #include "Portenta_H7_AsyncTCP.h"
 #include "cbuf.h"
+
+/////////////////////////////////////////////
 
 #define DEBUG_ESP_SYNC_CLIENT
 
@@ -65,6 +70,8 @@
   #define SYNC_CLIENT_DEBUG(...) do { (void)0;} while(false)
 #endif
 
+/////////////////////////////////////////////
+
 /*
   Without LWIP_NETIF_TX_SINGLE_PBUF, all tcp_writes default to "no copy".
   Referenced data must be preserved and free-ed from the specified tcp_sent()
@@ -72,6 +79,8 @@
   attribute.
 */
 static_assert(LWIP_NETIF_TX_SINGLE_PBUF, "Required, tcp_write() must always copy.");
+
+/////////////////////////////////////////////
 
 SyncClient::SyncClient(size_t txBufLen)
   : _client(NULL)
@@ -82,6 +91,8 @@ SyncClient::SyncClient(size_t txBufLen)
 {
   ref();
 }
+
+/////////////////////////////////////////////
 
 SyncClient::SyncClient(AsyncClient *client, size_t txBufLen)
   : _client(client)
@@ -94,11 +105,15 @@ SyncClient::SyncClient(AsyncClient *client, size_t txBufLen)
     _attachCallbacks();
 }
 
+/////////////////////////////////////////////
+
 SyncClient::~SyncClient() 
 {
   if (0 == unref())
     _release();
 }
+
+/////////////////////////////////////////////
 
 void SyncClient::_release() 
 {
@@ -126,6 +141,8 @@ void SyncClient::_release()
   }
 }
 
+/////////////////////////////////////////////
+
 int SyncClient::ref() 
 {
   if (_ref == NULL) 
@@ -140,6 +157,8 @@ int SyncClient::ref()
   
   return (++*_ref);
 }
+
+/////////////////////////////////////////////
 
 int SyncClient::unref() 
 {
@@ -158,6 +177,8 @@ int SyncClient::unref()
   
   return count;
 }
+
+/////////////////////////////////////////////
 
 #if ASYNC_TCP_SSL_ENABLED
 int SyncClient::_connect(const IPAddress& ip, uint16_t port, bool secure)
@@ -198,6 +219,8 @@ int SyncClient::_connect(const IPAddress& ip, uint16_t port)
   return 0;
 }
 
+/////////////////////////////////////////////
+
 #if ASYNC_TCP_SSL_ENABLED
 int SyncClient::connect(const char *host, uint16_t port, bool secure)
 #else
@@ -236,6 +259,8 @@ int SyncClient::connect(const char *host, uint16_t port)
   
   return 0;
 }
+
+/////////////////////////////////////////////
 
 //#define SYNCCLIENT_NEW_OPERATOR_EQUAL
 #ifdef SYNCCLIENT_NEW_OPERATOR_EQUAL
@@ -280,7 +305,11 @@ SyncClient & SyncClient::operator=(const SyncClient &other)
   return *this;
 }
 
+/////////////////////////////////////////////
+
 #else   // ! SYNCCLIENT_NEW_OPERATOR_EQUAL
+
+/////////////////////////////////////////////
 
 // This is the origianl logic with null checks
 SyncClient & SyncClient::operator=(const SyncClient &other) 
@@ -317,13 +346,20 @@ SyncClient & SyncClient::operator=(const SyncClient &other)
 
   return *this;
 }
+
+/////////////////////////////////////////////
+
 #endif
+
+/////////////////////////////////////////////
 
 void SyncClient::setTimeout(uint32_t seconds) 
 {
   if (_client != NULL)
     _client->setRxTimeout(seconds);
 }
+
+/////////////////////////////////////////////
 
 uint8_t SyncClient::status() 
 {
@@ -333,10 +369,14 @@ uint8_t SyncClient::status()
   return _client->state();
 }
 
+/////////////////////////////////////////////
+
 uint8_t SyncClient::connected() 
 {
   return (_client != NULL && _client->connected());
 }
+
+/////////////////////////////////////////////
 
 bool SyncClient::stop(unsigned int maxWaitMs) 
 {
@@ -347,6 +387,8 @@ bool SyncClient::stop(unsigned int maxWaitMs)
     
   return true;
 }
+
+/////////////////////////////////////////////
 
 size_t SyncClient::_sendBuffer() 
 {
@@ -374,6 +416,8 @@ size_t SyncClient::_sendBuffer()
   
   return sent;
 }
+
+/////////////////////////////////////////////
 
 void SyncClient::_onData(void *data, size_t len) 
 {
@@ -405,6 +449,8 @@ void SyncClient::_onData(void *data, size_t len)
   }
 }
 
+/////////////////////////////////////////////
+
 void SyncClient::_onDisconnect() 
 {
   if (_client != NULL) 
@@ -419,6 +465,8 @@ void SyncClient::_onDisconnect()
     delete b;
   }
 }
+
+/////////////////////////////////////////////
 
 void SyncClient::_onConnect(AsyncClient *c) 
 {
@@ -435,11 +483,15 @@ void SyncClient::_onConnect(AsyncClient *c)
   _attachCallbacks_AfterConnected();
 }
 
+/////////////////////////////////////////////
+
 void SyncClient::_attachCallbacks() 
 {
   _attachCallbacks_Disconnect();
   _attachCallbacks_AfterConnected();
 }
+
+/////////////////////////////////////////////
 
 void SyncClient::_attachCallbacks_AfterConnected() 
 {
@@ -448,11 +500,13 @@ void SyncClient::_attachCallbacks_AfterConnected()
     PORTENTA_H7_ATCP_UNUSED(c);
     PORTENTA_H7_ATCP_UNUSED(len);
     PORTENTA_H7_ATCP_UNUSED(time);
+    
     ((SyncClient*)(obj))->_sendBuffer();
   }, this);
 
   _client->onData([](void *obj, AsyncClient * c, void *data, size_t len)
-  { PORTENTA_H7_ATCP_UNUSED(c);
+  { 
+    PORTENTA_H7_ATCP_UNUSED(c);
     ((SyncClient*)(obj))->_onData(data, len);
   }, this);
 
@@ -460,9 +514,12 @@ void SyncClient::_attachCallbacks_AfterConnected()
   {
     PORTENTA_H7_ATCP_UNUSED(obj);
     PORTENTA_H7_ATCP_UNUSED(time);
+    
     c->close();
   }, this);
 }
+
+/////////////////////////////////////////////
 
 void SyncClient::_attachCallbacks_Disconnect()
 {
@@ -473,10 +530,14 @@ void SyncClient::_attachCallbacks_Disconnect()
   }, this);
 }
 
+/////////////////////////////////////////////
+
 size_t SyncClient::write(uint8_t data) 
 {
   return write(&data, 1);
 }
+
+/////////////////////////////////////////////
 
 size_t SyncClient::write(const uint8_t *data, size_t len) 
 {
@@ -511,6 +572,8 @@ size_t SyncClient::write(const uint8_t *data, size_t len)
   return len;
 }
 
+/////////////////////////////////////////////
+
 int SyncClient::available() 
 {
   if (_rx_buffer == NULL) 
@@ -528,6 +591,8 @@ int SyncClient::available()
   return a;
 }
 
+/////////////////////////////////////////////
+
 int SyncClient::peek() 
 {
   if (_rx_buffer == NULL) 
@@ -535,6 +600,8 @@ int SyncClient::peek()
     
   return _rx_buffer->peek();
 }
+
+/////////////////////////////////////////////
 
 int SyncClient::read(uint8_t *data, size_t len) 
 {
@@ -566,6 +633,8 @@ int SyncClient::read(uint8_t *data, size_t len)
   return readSoFar;
 }
 
+/////////////////////////////////////////////
+
 int SyncClient::read() 
 {
   uint8_t res = 0;
@@ -575,6 +644,8 @@ int SyncClient::read()
     
   return res;
 }
+
+/////////////////////////////////////////////
 
 bool SyncClient::flush(unsigned int maxWaitMs) 
 {
@@ -596,3 +667,6 @@ bool SyncClient::flush(unsigned int maxWaitMs)
   
   return true;
 }
+
+/////////////////////////////////////////////
+

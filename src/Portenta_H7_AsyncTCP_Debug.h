@@ -9,7 +9,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Portenta_H7_ASYNC_TCP
   Licensed under MIT license
  
-  Version: 1.3.2
+  Version: 1.4.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -19,6 +19,7 @@
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
   1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
   1.3.2   K Hoang      21/06/2022 Fix PIO platform in `library.json`
+  1.4.0   K Hoang      26/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
  *****************************************************************************************************************************/
 
 #pragma once
@@ -26,11 +27,15 @@
 #ifndef PORTENTA_H7_ASYNC_TCP_DEBUG_H
 #define PORTENTA_H7_ASYNC_TCP_DEBUG_H
 
+/////////////////////////////////////////////
+
 #ifdef PORTENTA_H7_ASYNC_TCP_DEBUG_PORT
   #define DBG_PORT_ATCP      PORTENTA_H7_ASYNC_TCP_DEBUG_PORT
 #else
   #define DBG_PORT_ATCP      Serial
 #endif
+
+/////////////////////////////////////////////
 
 // Change _PORTENTA_H7_ATCP_LOGLEVEL_ to set tracing and logging verbosity
 // 0: DISABLED: no logging

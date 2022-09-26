@@ -11,6 +11,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.4.0](#Releases-v140)
   * [Releases v1.3.2](#Releases-v132)
   * [Releases v1.3.1](#Releases-v131)
   * [Releases v1.3.0](#Releases-v130)
@@ -22,6 +23,13 @@
 ---
 
 ## Changelog
+
+### Releases v1.4.0
+
+1. Fix issue with slow browsers or network
+2. Remove hard-code if possible
+3. Improve debug messages by adding functions to display `error/state messages` instead of `cryptic error/state number`
+4. Clean up
 
 ### Releases v1.3.2
 

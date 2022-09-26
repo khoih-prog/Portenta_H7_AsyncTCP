@@ -14,7 +14,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.3.2
+  Version: 1.4.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
   1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
   1.3.2   K Hoang      21/06/2022 Fix PIO platform in `library.json`
+  1.4.0   K Hoang      26/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
  *****************************************************************************************************************************/
 /**
  * @file Portenta_H7_AsyncTCPbuffer.h
@@ -52,16 +53,22 @@
 #ifndef PORTENTA_H7_ASYNCTCPBUFFER_H_
 #define PORTENTA_H7_ASYNCTCPBUFFER_H_
 
+/////////////////////////////////////////////
+
 //#define DEBUG_ASYNC_TCP(...)  while(((U0S >> USTXC) & 0x7F) != 0x00); os_printf( __VA_ARGS__ ); while(((U0S >> USTXC) & 0x7F) != 0x00)
 //#define DEBUG_ASYNC_TCP ASYNC_TCP_DEBUG
 #ifndef DEBUG_ASYNC_TCP
-#define DEBUG_ASYNC_TCP(...)
+  #define DEBUG_ASYNC_TCP(...)
 #endif
+
+/////////////////////////////////////////////
 
 #include <Arduino.h>
 #include <cbuf.h>
 
 #include "Portenta_H7_AsyncTCP.h"
+
+/////////////////////////////////////////////
 
 typedef enum 
 {
@@ -72,9 +79,10 @@ typedef enum
   ATB_RX_MODE_TERMINATOR_STRING
 } atbRxMode_t;
 
+/////////////////////////////////////////////
+
 class AsyncTCPbuffer: public Print 
 {
-
   public:
 
     typedef std::function<size_t(uint8_t * payload, size_t length)> AsyncTCPbufferDataCb;
@@ -141,5 +149,7 @@ class AsyncTCPbuffer: public Print
     size_t _handleRxBuffer(uint8_t *buf, size_t len);
 
 };
+
+/////////////////////////////////////////////
 
 #endif /* PORTENTA_H7_ASYNCTCPBUFFER_H_ */

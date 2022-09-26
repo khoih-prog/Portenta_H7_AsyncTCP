@@ -14,7 +14,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.3.2
+  Version: 1.4.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
   1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
   1.3.2   K Hoang      21/06/2022 Fix PIO platform in `library.json`
+  1.4.0   K Hoang      26/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
  *****************************************************************************************************************************/
 /*
   Asynchronous TCP library for Espressif MCUs
@@ -50,8 +51,12 @@
   #define _PORTENTA_H7_ATCP_LOGLEVEL_     1
 #endif
 
+/////////////////////////////////////////////
+
 #include "AsyncPrinter.h"
 #include "debug.h"
+
+/////////////////////////////////////////////
 
 AsyncPrinter::AsyncPrinter()
   : _client(NULL)
@@ -63,6 +68,8 @@ AsyncPrinter::AsyncPrinter()
   , _tx_buffer_size(TCP_MSS)
   , next(NULL)
 {}
+
+/////////////////////////////////////////////
 
 AsyncPrinter::AsyncPrinter(AsyncClient *client, size_t txBufLen)
   : _client(client)
@@ -83,10 +90,14 @@ AsyncPrinter::AsyncPrinter(AsyncClient *client, size_t txBufLen)
   }
 }
 
+/////////////////////////////////////////////
+
 AsyncPrinter::~AsyncPrinter() 
 {
   _on_close();
 }
+
+/////////////////////////////////////////////
 
 void AsyncPrinter::onData(ApDataHandler cb, void *arg) 
 {
@@ -94,11 +105,15 @@ void AsyncPrinter::onData(ApDataHandler cb, void *arg)
   _data_arg = arg;
 }
 
+/////////////////////////////////////////////
+
 void AsyncPrinter::onClose(ApCloseHandler cb, void *arg) 
 {
   _close_cb = cb;
   _close_arg = arg;
 }
+
+/////////////////////////////////////////////
 
 int AsyncPrinter::connect(IPAddress ip, uint16_t port) 
 {
@@ -128,6 +143,8 @@ int AsyncPrinter::connect(IPAddress ip, uint16_t port)
   return 0;
 }
 
+/////////////////////////////////////////////
+
 int AsyncPrinter::connect(const char *host, uint16_t port) 
 {
   if (_client != NULL && connected())
@@ -156,6 +173,8 @@ int AsyncPrinter::connect(const char *host, uint16_t port)
   return 0;
 }
 
+/////////////////////////////////////////////
+
 void AsyncPrinter::_onConnect(AsyncClient *c) 
 {
   PORTENTA_H7_ATCP_UNUSED(c);
@@ -177,10 +196,14 @@ void AsyncPrinter::_onConnect(AsyncClient *c)
   _attachCallbacks();
 }
 
+/////////////////////////////////////////////
+
 AsyncPrinter::operator bool() 
 {
   return connected();
 }
+
+/////////////////////////////////////////////
 
 AsyncPrinter & AsyncPrinter::operator=(const AsyncPrinter &other) 
 {
@@ -212,10 +235,14 @@ AsyncPrinter & AsyncPrinter::operator=(const AsyncPrinter &other)
   return *this;
 }
 
+/////////////////////////////////////////////
+
 size_t AsyncPrinter::write(uint8_t data) 
 {
   return write(&data, 1);
 }
+
+/////////////////////////////////////////////
 
 size_t AsyncPrinter::write(const uint8_t *data, size_t len) 
 {
@@ -253,16 +280,22 @@ size_t AsyncPrinter::write(const uint8_t *data, size_t len)
   return len;
 }
 
+/////////////////////////////////////////////
+
 bool AsyncPrinter::connected() 
 {
   return (_client != NULL && _client->connected());
 }
+
+/////////////////////////////////////////////
 
 void AsyncPrinter::close() 
 {
   if (_client != NULL)
     _client->close(true);
 }
+
+/////////////////////////////////////////////
 
 size_t AsyncPrinter::_sendBuffer() 
 {
@@ -290,11 +323,15 @@ size_t AsyncPrinter::_sendBuffer()
   return sent;
 }
 
+/////////////////////////////////////////////
+
 void AsyncPrinter::_onData(void *data, size_t len) 
 {
   if (_data_cb)
     _data_cb(_data_arg, this, (uint8_t*)data, len);
 }
+
+/////////////////////////////////////////////
 
 void AsyncPrinter::_on_close() 
 {
@@ -313,6 +350,8 @@ void AsyncPrinter::_on_close()
   if (_close_cb)
     _close_cb(_close_arg, this);
 }
+
+/////////////////////////////////////////////
 
 void AsyncPrinter::_attachCallbacks()
 {
@@ -342,3 +381,6 @@ void AsyncPrinter::_attachCallbacks()
     ((AsyncPrinter*)(obj))->_onData(data, len);
   }, this);
 }
+
+/////////////////////////////////////////////
+

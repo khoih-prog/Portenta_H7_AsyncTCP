@@ -14,7 +14,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.3.2
+  Version: 1.4.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
   1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
   1.3.2   K Hoang      21/06/2022 Fix PIO platform in `library.json`
+  1.4.0   K Hoang      26/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
  *****************************************************************************************************************************/
 /*
   Asynchronous TCP library for Espressif MCUs
@@ -49,6 +50,8 @@
 #ifndef SYNCCLIENT_H_
 #define SYNCCLIENT_H_
 
+/////////////////////////////////////////////
+
 #define LWIP_NETIF_TX_SINGLE_PBUF      1
 
 #include "Client.h"
@@ -61,8 +64,12 @@
 
 #include <async_config.h>
 
+/////////////////////////////////////////////
+
 class cbuf;
 class AsyncClient;
+
+/////////////////////////////////////////////
 
 class SyncClient: public Client 
 {
@@ -98,6 +105,7 @@ class SyncClient: public Client
     SyncClient & operator=(const SyncClient &other);
 
 #if ASYNC_TCP_SSL_ENABLED
+
     int _connect(const IPAddress& ip, uint16_t port, bool secure);
     
     int connect(CONST IPAddress& ip, uint16_t port, bool secure) 
@@ -126,7 +134,9 @@ class SyncClient: public Client
     {
       return connect(host, port, false);
     }
+    
 #else
+
     int _connect(const IPAddress& ip, uint16_t port);
     
     int connect(CONST IPAddress& ip, uint16_t port) 
@@ -140,7 +150,9 @@ class SyncClient: public Client
     }
     
     int connect(const char *host, uint16_t port);
+    
 #endif
+
     void setTimeout(uint32_t seconds);
 
     uint8_t status();
@@ -167,5 +179,7 @@ class SyncClient: public Client
     int read();
     int read(uint8_t *data, size_t len);
 };
+
+/////////////////////////////////////////////
 
 #endif /* SYNCCLIENT_H_ */

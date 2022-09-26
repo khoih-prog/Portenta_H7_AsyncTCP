@@ -14,7 +14,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.3.2
+  Version: 1.4.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
   1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
   1.3.2   K Hoang      21/06/2022 Fix PIO platform in `library.json`
+  1.4.0   K Hoang      26/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
  *****************************************************************************************************************************/
 /*
   Asynchronous TCP library for Espressif MCUs
@@ -49,6 +50,8 @@
 #ifndef PORTENTA_H7_ASYNCTCP_H_
 #define PORTENTA_H7_ASYNCTCP_H_
 
+/////////////////////////////////////////////
+
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
 
   #if defined(BOARD_NAME)
@@ -69,7 +72,11 @@
     
 #endif
 
+/////////////////////////////////////////////
+
 #include "Arduino.h"
+
+/////////////////////////////////////////////
 
 #if (ETHERNET_USE_PORTENTA_H7 || USE_ETHERNET_PORTENTA_H7)
   #define SHIELD_TYPE           "Ethernet using Portenta_Ethernet Library"
@@ -83,21 +90,31 @@
   #include <WiFiClient.h>
 #endif
 
-#define PORTENTA_H7_ASYNC_TCP_VERSION            "Portenta_H7_AsyncTCP v1.3.2"
+/////////////////////////////////////////////
+
+#define PORTENTA_H7_ASYNC_TCP_VERSION            "Portenta_H7_AsyncTCP v1.4.0"
 
 #define PORTENTA_H7_ASYNC_TCP_VERSION_MAJOR      1
-#define PORTENTA_H7_ASYNC_TCP_VERSION_MINOR      3
-#define PORTENTA_H7_ASYNC_TCP_VERSION_PATCH      2
+#define PORTENTA_H7_ASYNC_TCP_VERSION_MINOR      4
+#define PORTENTA_H7_ASYNC_TCP_VERSION_PATCH      0
 
-#define PORTENTA_H7_ASYNC_TCP_VERSION_INT        1003002
+#define PORTENTA_H7_ASYNC_TCP_VERSION_INT        1004000
 
+/////////////////////////////////////////////
+
+#if ASYNC_TCP_SSL_ENABLED
+  #undef ASYNC_TCP_SSL_ENABLED
+  #define ASYNC_TCP_SSL_ENABLED			false
+  
+  #warning ASYNC_TCP_SSL_ENABLED is not ready yet. Disable it
+#endif
 
 #define DEBUG_ESP_ASYNC_TCP       true
 
+/////////////////////////////////////////////
 
 #include "Portenta_H7_AsyncTCP_Debug.h"
 
-//#include <mbed_config.h>
 #define MBED_CONF_LWIP_IPV4_ENABLED     1
 
 #include <async_config.h>
@@ -111,24 +128,23 @@ extern "C"
   #include "lwip/err.h"
   #include "lwip/tcp.h"
   #include "lwip/pbuf.h"
-  
-  //#include "lwip/opt.h"
-  //#include "lwip/inet.h"
-  //#include "lwip/dns.h"
-  //#include "lwip/init.h"
 };
 
 #ifndef PORTENTA_H7_ATCP_UNUSED
   #define PORTENTA_H7_ATCP_UNUSED(x)       (void)(x)
 #endif
 
+/////////////////////////////////////////////
+
 class AsyncClient;
 class AsyncServer;
 class ACErrorTracker;
 
-#define ASYNC_MAX_ACK_TIME 5000
-#define ASYNC_WRITE_FLAG_COPY 0x01 //will allocate new buffer to hold the data while sending (else will hold reference to the data given)
-#define ASYNC_WRITE_FLAG_MORE 0x02 //will not send PSH flag, meaning that there should be more data to be sent before the application should react.
+#define ASYNC_MAX_ACK_TIME      5000
+#define ASYNC_WRITE_FLAG_COPY   0x01    //to allocate new buffer to hold the data while sending
+#define ASYNC_WRITE_FLAG_MORE   0x02    //not send PSH flag. More data to be sent before the application should react.
+
+/////////////////////////////////////////////
 
 struct tcp_pcb;
 
@@ -157,6 +173,8 @@ enum error_events
   EE_ACCEPT_CB,
   EE_MAX
 };
+
+/////////////////////////////////////////////
 
 // DEBUG_MORE is for gathering more information on which CBs close events are
 // occuring and count.
@@ -220,6 +238,8 @@ class ACErrorTracker
     ACErrorTracker(AsyncClient *c);
     ~ACErrorTracker() {}
 };
+
+/////////////////////////////////////////////
 
 class AsyncClient 
 {
@@ -419,11 +439,14 @@ class AsyncClient
     }
 };
 
+/////////////////////////////////////////////
+
 #if ASYNC_TCP_SSL_ENABLED
   typedef std::function<int(void* arg, const char *filename, uint8_t **buf)> AcSSlFileHandler;
   struct pending_pcb;
 #endif
 
+/////////////////////////////////////////////
 
 class AsyncServer 
 {
@@ -492,5 +515,6 @@ class AsyncServer
 #endif
 };
 
+/////////////////////////////////////////////
 
 #endif /* PORTENTA_H7_ASYNCTCP_H_ */

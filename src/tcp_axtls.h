@@ -14,7 +14,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
-  Version: 1.3.2
+  Version: 1.4.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.3.0   K Hoang      06/12/2021 Fix compile error issue in mbed_portenta v2.6.1+
   1.3.1   K Hoang      23/05/2022 Fix typo in `library.json`
   1.3.2   K Hoang      21/06/2022 Fix PIO platform in `library.json`
+  1.4.0   K Hoang      26/09/2022 Fix issue with slow browsers or network. Clean up. Remove hard-code if possible
  *****************************************************************************************************************************/
 /*
   Asynchronous TCP library for Espressif MCUs
@@ -63,12 +64,16 @@
 */
 #if LWIP_RAW==1
 
+/////////////////////////////////////////////
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <stdbool.h>
 #include "include/ssl.h"
+
+/////////////////////////////////////////////
 
 #define ERR_TCP_SSL_INVALID_SSL           -101
 #define ERR_TCP_SSL_INVALID_TCP           -102
@@ -81,6 +86,8 @@ extern "C" {
 
 #define tcp_ssl_ssl_write(A, B, C) tcp_ssl_write(A, B, C)
 #define tcp_ssl_ssl_read(A, B) tcp_ssl_read(A, B)
+
+/////////////////////////////////////////////
 
 typedef void  (* tcp_ssl_data_cb_t)(void *arg, struct tcp_pcb *tcp, uint8_t * data, size_t len);
 typedef void  (* tcp_ssl_handshake_cb_t)(void *arg, struct tcp_pcb *tcp, SSL *ssl);
@@ -114,9 +121,13 @@ void tcp_ssl_err(struct tcp_pcb *tcp, tcp_ssl_error_cb_t arg);
 SSL * tcp_ssl_get_ssl(struct tcp_pcb *tcp);
 bool tcp_ssl_has(struct tcp_pcb *tcp);
 
+/////////////////////////////////////////////
+
 #ifdef __cplusplus
 }
 #endif
+
+/////////////////////////////////////////////
 
 #endif /* LWIP_RAW==1 */
 
