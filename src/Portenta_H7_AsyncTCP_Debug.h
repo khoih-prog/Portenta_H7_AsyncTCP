@@ -1,16 +1,16 @@
 /****************************************************************************************************************************
   Portenta_H7_AsyncTCP_Debug.h
-  
+
   For Portenta_H7 (STM32H7) with Vision-Shield Ethernet
-  
+
   Portenta_H7_ASYNC_TCP is a library for the Portenta_H7 with with Vision-Shield Ethernet
-  
+
   Based on and modified from ESPASYNC_TCP (https://github.com/me-no-dev/ESPASYNC_TCP)
   Built by Khoi Hoang https://github.com/khoih-prog/Portenta_H7_ASYNC_TCP
   Licensed under MIT license
- 
+
   Version: 1.4.0
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      06/10/2021 Initial coding for Portenta_H7 (STM32H7) with Vision-Shield Ethernet

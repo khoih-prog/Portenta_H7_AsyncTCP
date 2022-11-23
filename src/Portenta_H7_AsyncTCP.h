@@ -1,21 +1,21 @@
 /****************************************************************************************************************************
   Portenta_H7_AsyncTCP.h
-  
+
   For Portenta_H7 (STM32H7) with Vision-Shield Ethernet
-  
+
   Portenta_H7_AsyncWebServer is a library for the Portenta_H7 with with Vision-Shield Ethernet
-  
+
   Based on and modified from AsyncTCP (https://github.com/me-no-dev/ESPAsyncTCP)
   Built by Khoi Hoang https://github.com/khoih-prog/Portenta_H7_AsyncTCP
-  
-  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
+
+  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
   as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
- 
+
   Version: 1.4.0
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      06/10/2021 Initial coding for Portenta_H7 (STM32H7) with Vision-Shield Ethernet
@@ -69,7 +69,7 @@
 #else
 
   #error For Portenta_H7 only
-    
+
 #endif
 
 /////////////////////////////////////////////
@@ -104,8 +104,8 @@
 
 #if ASYNC_TCP_SSL_ENABLED
   #undef ASYNC_TCP_SSL_ENABLED
-  #define ASYNC_TCP_SSL_ENABLED			false
-  
+  #define ASYNC_TCP_SSL_ENABLED     false
+
   #warning ASYNC_TCP_SSL_ENABLED is not ready yet. Disable it
 #endif
 
@@ -124,10 +124,10 @@
 
 extern "C"
 {
-  #include "lwip/ip_addr.h"
-  #include "lwip/err.h"
-  #include "lwip/tcp.h"
-  #include "lwip/pbuf.h"
+#include "lwip/ip_addr.h"
+#include "lwip/err.h"
+#include "lwip/tcp.h"
+#include "lwip/pbuf.h"
 };
 
 #ifndef PORTENTA_H7_ATCP_UNUSED
@@ -163,7 +163,7 @@ typedef std::function<void(void*, AsyncClient*, struct pbuf *pb)> AcPacketHandle
 typedef std::function<void(void*, AsyncClient*, uint32_t time)> AcTimeoutHandler;
 typedef std::function<void(void*, size_t event)> AsNotifyHandler;
 
-enum error_events 
+enum error_events
 {
   EE_OK = 0,
   EE_ABORTED,       // Callback or foreground aborted connections
@@ -179,13 +179,13 @@ enum error_events
 // DEBUG_MORE is for gathering more information on which CBs close events are
 // occuring and count.
 // #define DEBUG_MORE 1
-class ACErrorTracker 
+class ACErrorTracker
 {
   private:
     AsyncClient *_client;
     err_t _close_error;
     int _errored;
-    
+
 #if DEBUG_ESP_ASYNC_TCP
     size_t _connectionId;
 #endif
@@ -198,18 +198,18 @@ class ACErrorTracker
   protected:
     friend class AsyncClient;
     friend class AsyncServer;
-    
+
 #ifdef DEBUG_MORE
     void onErrorEvent(AsNotifyHandler cb, void *arg);
 #endif
 
 #if DEBUG_ESP_ASYNC_TCP
-    void setConnectionId(size_t id) 
+    void setConnectionId(size_t id)
     {
       _connectionId = id;
     }
-    
-    size_t getConnectionId() 
+
+    size_t getConnectionId()
     {
       return _connectionId;
     }
@@ -218,30 +218,31 @@ class ACErrorTracker
     void setCloseError(err_t e);
     void setErrored(size_t errorEvent);
     err_t getCallbackCloseError();
-    
-    void clearClient() 
+
+    void clearClient()
     {
-      if (_client) _client = NULL;
+      if (_client)
+        _client = NULL;
     }
 
   public:
-    err_t getCloseError() const 
+    err_t getCloseError() const
     {
       return _close_error;
     }
-    
-    bool hasClient() const 
+
+    bool hasClient() const
     {
       return (_client != NULL);
     }
-    
+
     ACErrorTracker(AsyncClient *c);
     ~ACErrorTracker() {}
 };
 
 /////////////////////////////////////////////
 
-class AsyncClient 
+class AsyncClient
 {
   protected:
     friend class AsyncTCPbuffer;
@@ -264,7 +265,7 @@ class AsyncClient
     AcConnectHandler _poll_cb;
     void* _poll_cb_arg;
     bool _pcb_busy;
-    
+
 #if ASYNC_TCP_SSL_ENABLED
     bool _pcb_secure;
     bool _handshake_done;
@@ -287,14 +288,14 @@ class AsyncClient
     void _close();
     void _connected(std::shared_ptr<ACErrorTracker>& closeAbort, void* pcb, err_t err);
     void _error(err_t err);
-    
+
 #if ASYNC_TCP_SSL_ENABLED
     void _ssl_error(int8_t err);
 #endif
 
     void _poll(std::shared_ptr<ACErrorTracker>& closeAbort, tcp_pcb* pcb);
     void _sent(std::shared_ptr<ACErrorTracker>& closeAbort, tcp_pcb* pcb, uint16_t len);
-    
+
 #if LWIP_VERSION_MAJOR == 1
     void _dns_found(struct ip_addr *ipaddr);
 #else
@@ -306,7 +307,7 @@ class AsyncClient
     static void _s_error(void *arg, err_t err);
     static err_t _s_sent(void *arg, struct tcp_pcb *tpcb, uint16_t len);
     static err_t _s_connected(void* arg, void* tpcb, err_t err);
-    
+
 #if LWIP_VERSION_MAJOR == 1
     static void _s_dns_found(const char *name, struct ip_addr *ipaddr, void *arg);
 #else
@@ -319,12 +320,12 @@ class AsyncClient
     static void _s_ssl_error(void *arg, struct tcp_pcb *tcp, int8_t err);
 #endif
 
-    std::shared_ptr<ACErrorTracker> getACErrorTracker() const 
+    std::shared_ptr<ACErrorTracker> getACErrorTracker() const
     {
       return _errorTracker;
     };
-    
-    void setCloseError(err_t e) const 
+
+    void setCloseError(err_t e) const
     {
       _errorTracker->setCloseError(e);
     }
@@ -346,11 +347,11 @@ class AsyncClient
 
     bool operator==(const AsyncClient &other);
 
-    bool operator!=(const AsyncClient &other) 
+    bool operator!=(const AsyncClient &other)
     {
       return !(*this == other);
     }
-    
+
 #if ASYNC_TCP_SSL_ENABLED
     bool connect(IPAddress ip, uint16_t port, bool secure = false);
     bool connect(const char* host, uint16_t port, bool secure = false);
@@ -369,19 +370,19 @@ class AsyncClient
     size_t add(const char* data, size_t size, uint8_t apiflags = 0); //add for sending
     bool send();//send all data added with the method above
     size_t ack(size_t len); //ack data that you have not acked using the method below
-    
-    void ackLater() 
+
+    void ackLater()
     {
       _ack_pcb = false;  //will not ack the current packet. Call from onData
     }
-    
-    bool isRecvPush() 
+
+    bool isRecvPush()
     {
       return !!(_recv_pbuf_flags & PBUF_FLAG_PUSH);
     }
-    
+
 #if DEBUG_ESP_ASYNC_TCP
-    size_t getConnectionId() const 
+    size_t getConnectionId() const
     {
       return _errorTracker->getConnectionId();
     }
@@ -432,8 +433,8 @@ class AsyncClient
     const char * stateToString();
 
     void _recv(std::shared_ptr<ACErrorTracker>& closeAbort, tcp_pcb* pcb, pbuf* pb, err_t err);
-    
-    err_t getCloseError() const 
+
+    err_t getCloseError() const
     {
       return _errorTracker->getCloseError();
     }
@@ -448,7 +449,7 @@ class AsyncClient
 
 /////////////////////////////////////////////
 
-class AsyncServer 
+class AsyncServer
 {
   protected:
     uint16_t _port;
@@ -457,7 +458,7 @@ class AsyncServer
     tcp_pcb* _pcb;
     AcConnectHandler _connect_cb;
     void* _connect_cb_arg;
-    
+
 #if ASYNC_TCP_SSL_ENABLED
     struct pending_pcb * _pending;
     SSL_CTX * _ssl_ctx;
@@ -475,7 +476,7 @@ class AsyncServer
     AsyncServer(uint16_t port);
     ~AsyncServer();
     void onClient(AcConnectHandler cb, void* arg);
-    
+
 #if ASYNC_TCP_SSL_ENABLED
     void onSslFileRequest(AcSSlFileHandler cb, void* arg);
     void beginSecure(const char *cert, const char *private_key_file, const char *password);
@@ -486,9 +487,9 @@ class AsyncServer
     void setNoDelay(bool nodelay);
     bool getNoDelay();
     uint8_t status();
-    
+
 #ifdef DEBUG_MORE
-    int getEventCount(size_t ee) const 
+    int getEventCount(size_t ee) const
     {
       return _event_count[ee];
     }
@@ -497,9 +498,9 @@ class AsyncServer
   protected:
     err_t _accept(tcp_pcb* newpcb, err_t err);
     static err_t _s_accept(void *arg, tcp_pcb* newpcb, err_t err);
-    
+
 #ifdef DEBUG_MORE
-    int incEventCount(size_t ee) 
+    int incEventCount(size_t ee)
     {
       return ++_event_count[ee];
     }

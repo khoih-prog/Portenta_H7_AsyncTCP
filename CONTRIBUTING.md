@@ -15,7 +15,7 @@ If you don't find anything, please [open a new issue](https://github.com/khoih-p
 Please ensure to specify the following:
 
 * Arduino IDE version (e.g. 1.8.19) or Platform.io version
-* `ArduinoCore-mbed` Core Version (e.g. `ArduinoCore-mbed` mbed_portenta core v3.3.0)
+* `ArduinoCore-mbed` Core Version (e.g. `ArduinoCore-mbed` mbed_portenta core v3.4.1)
 * `Portenta_H7` Board type (e.g. Portenta_H7 Rev2 ABX00042, etc.)
 * Contextual information (e.g. what you were trying to achieve)
 * Simplest possible steps to reproduce
@@ -28,10 +28,10 @@ Please ensure to specify the following:
 
 ```
 Arduino IDE version: 1.8.19
-`ArduinoCore-mbed` mbed_portenta core v3.3.0
+`ArduinoCore-mbed` mbed_portenta core v3.4.1
 Portenta_H7 Rev2 ABX00042
 OS: Ubuntu 20.04 LTS
-Linux xy-Inspiron-3593 5.15.0-46-generic #49~20.04.1-Ubuntu SMP Thu Aug 4 19:15:44 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+Linux xy-Inspiron-3593 5.15.0-53-generic #59~20.04.1-Ubuntu SMP Thu Oct 20 15:10:22 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
 
 Context:
 I encountered a crash while using this library
@@ -43,14 +43,32 @@ Steps to reproduce:
 4. ...
 ```
 
+---
+
 ### Sending Feature Requests
 
 Feel free to post feature requests. It's helpful if you can explain exactly why the feature would be useful.
 
 There are usually some outstanding feature requests in the [existing issues list](https://github.com/khoih-prog/Portenta_H7_AsyncTCP/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement), feel free to add comments to them.
 
+---
+
 ### Sending Pull Requests
 
 Pull Requests with changes and fixes are also welcome!
 
+Please use the `astyle` to reformat the updated library code as follows (demo for Ubuntu Linux)
+
+1. Change directory to the library GitHub
+
+```
+xy@xy-Inspiron-3593:~$ cd Arduino/xy/Portenta_H7_AsyncTCP_GitHub/
+xy@xy-Inspiron-3593:~/Arduino/xy/Portenta_H7_AsyncTCP_GitHub$
+```
+
+2. Issue astyle command
+
+```
+xy@xy-Inspiron-3593:~/Arduino/xy/Portenta_H7_AsyncTCP_GitHub$ bash utils/restyle.sh
+```
 

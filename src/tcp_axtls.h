@@ -1,21 +1,21 @@
 /****************************************************************************************************************************
   tcp_axtls.h
-  
+
   For Portenta_H7 (STM32H7) with Vision-Shield Ethernet
-  
+
   Portenta_H7_AsyncWebServer is a library for the Portenta_H7 with with Vision-Shield Ethernet
-  
+
   Based on and modified from AsyncTCP (https://github.com/me-no-dev/ESPAsyncTCP)
   Built by Khoi Hoang https://github.com/khoih-prog/Portenta_H7_AsyncTCP
-  
-  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
+
+  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
   as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
- 
+
   Version: 1.4.0
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      06/10/2021 Initial coding for Portenta_H7 (STM32H7) with Vision-Shield Ethernet
@@ -47,9 +47,9 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
- * Compatibility for AxTLS with LWIP raw tcp mode (http://lwip.wikia.com/wiki/Raw/TCP)
- * Original Code and Inspiration: Slavey Karadzhov
- */
+   Compatibility for AxTLS with LWIP raw tcp mode (http://lwip.wikia.com/wiki/Raw/TCP)
+   Original Code and Inspiration: Slavey Karadzhov
+*/
 
 #ifndef LWIPR_COMPAT_H
 #define LWIPR_COMPAT_H
@@ -106,7 +106,7 @@ int tcp_ssl_free(struct tcp_pcb *tcp);
 int tcp_ssl_read(struct tcp_pcb *tcp, struct pbuf *p);
 
 #ifdef AXTLS_2_0_0_SNDBUF
-  int tcp_ssl_sndbuf(struct tcp_pcb *tcp);
+int tcp_ssl_sndbuf(struct tcp_pcb *tcp);
 #endif
 
 int tcp_ssl_write(struct tcp_pcb *tcp, uint8_t *data, size_t len);

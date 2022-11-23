@@ -1,22 +1,22 @@
-/* 
- cbuf.h - Circular buffer implementation
- Copyright (c) 2014 Ivan Grokhotkov. All rights reserved.
- This file is part of the esp8266 core for Arduino environment.
- 
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 2.1 of the License, or (at your option) any later version.
+/*
+  cbuf.h - Circular buffer implementation
+  Copyright (c) 2014 Ivan Grokhotkov. All rights reserved.
+  This file is part of the esp8266 core for Arduino environment.
 
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
 
- You should have received a copy of the GNU Lesser General Public
- License along with this library; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- */
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
 #ifndef __cbuf_h
 #define __cbuf_h
@@ -25,7 +25,7 @@
 #include <stdint.h>
 #include <string.h>
 
-class cbuf 
+class cbuf
 {
   public:
     cbuf(size_t size);
@@ -38,12 +38,12 @@ class cbuf
 
     size_t room() const;
 
-    inline bool empty() const 
+    inline bool empty() const
     {
       return _begin == _end;
     }
 
-    inline bool full() const 
+    inline bool full() const
     {
       return wrap_if_bufend(_end + 1) == _begin;
     }
@@ -63,7 +63,7 @@ class cbuf
     cbuf *next;
 
   private:
-    inline char* wrap_if_bufend(char* ptr) const 
+    inline char* wrap_if_bufend(char* ptr) const
     {
       return (ptr == _bufend) ? _buf : ptr;
     }

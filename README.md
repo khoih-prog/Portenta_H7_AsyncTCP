@@ -1,4 +1,4 @@
-# Portenta_H7_AsyncTCP 
+# Portenta_H7_AsyncTCP Library
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/Portenta_H7_AsyncTCP.svg?)](https://www.ardu-badge.com/Portenta_H7_AsyncTCP)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/Portenta_H7_AsyncTCP.svg)](https://github.com/khoih-prog/Portenta_H7_AsyncTCP/releases)
@@ -8,6 +8,8 @@
 
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-Portenta_H7_AsyncTCP/count.svg" title="Portenta_H7_AsyncTCP Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-Portenta_H7_AsyncTCP/count.svg" style="height: 30px;width: 200px;"></a>
 
 ---
 ---
@@ -83,7 +85,7 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
 
 ### Currently supported Boards
 
-1. **Portenta_H7 boards** such as Portenta_H7 Rev2 ABX00042, etc., using [**ArduinoCore-mbed mbed_portenta** core](https://github.com/arduino/ArduinoCore-mbed) using `Vision-shield Ethernet` or `Murata WiFi`
+1. **Portenta_H7 boards** such as `Portenta_H7 Rev2 ABX00042`, etc., using [**ArduinoCore-mbed mbed_portenta** core](https://github.com/arduino/ArduinoCore-mbed) using `Vision-shield Ethernet` or `Murata WiFi`
 
 
 ---
@@ -92,7 +94,7 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
- 2. [`ArduinoCore-mbed mbed_portenta core 3.3.0+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+ 2. [`ArduinoCore-mbed mbed_portenta core 3.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 
 ---
 ---
@@ -109,9 +111,9 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 Another way to install is to:
 
 1. Navigate to [**Portenta_H7_AsyncTCP**](https://github.com/khoih-prog/Portenta_H7_AsyncTCP) page.
-2. Download the latest release `Portenta_H7_AsyncTCP-master.zip`.
-3. Extract the zip file to `Portenta_H7_AsyncTCP-master` directory 
-4. Copy whole `Portenta_H7_AsyncTCP-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
+2. Download the latest release `Portenta_H7_AsyncTCP-main.zip`.
+3. Extract the zip file to `Portenta_H7_AsyncTCP-main` directory 
+4. Copy whole `Portenta_H7_AsyncTCP-main` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO
 
@@ -127,12 +129,12 @@ Another way to install is to:
 
 #### 1. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.3.0/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.3.0/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.3.0
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -145,9 +147,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 3.3.0. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 3.4.1. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.3.0/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -168,8 +170,6 @@ Supposing the Arduino mbed_portenta version is 2.5.2. These file must be copied 
 - `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/libraries/SocketWrapper/src/MbedUdp.h`
 - `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/libraries/SocketWrapper/src/MbedUdp.cpp`
 - `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/cores/arduino/mbed/connectivity/lwipstack/include/lwipstack/lwipopts.h`
-
-
 
 ---
 ---
@@ -213,10 +213,10 @@ It is exactly what it sounds like. This is a standard, synchronous blocking TCP 
 
 Following is the debug terminal and screen shot when running example [Async_AdvancedWebServer](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/tree/main/examples/Ethernet/Async_AdvancedWebServer) on Portenta_H7 Ethernet to demonstrate the operation of Portenta_H7_AsyncWebServer, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
 
-```
+```cpp
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
 Portenta_H7_AsyncTCP v1.4.0
-Portenta_H7_AsyncWebServer v1.3.0
+Portenta_H7_AsyncWebServer v1.4.2
 Using mac index = 4
 Connected! IP address: 192.168.2.87
 HTTP EthernetWebServer is @ IP : 192.168.2.87
@@ -226,7 +226,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.87
 You can access the Async Advanced WebServers at the displayed server IP, e.g. `192.168.2.87`
 
 <p align="center">
-    <img src="https://github.com/khoih-prog/Portenta_H7_AsyncTCP/blob/main/pics/Async_AdvancedWebServer.png">
+    <img src="https://github.com/khoih-prog/Portenta_H7_AsyncTCP/raw/main/pics/Async_AdvancedWebServer.png">
 </p>
 
 
@@ -236,10 +236,10 @@ You can access the Async Advanced WebServers at the displayed server IP, e.g. `1
 
 Following is the debug terminal and screen shot when running example [Async_AdvancedWebServer](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/tree/main/examples/WiFi/Async_AdvancedWebServer) on Portenta_H7 WiFi to demonstrate the operation of Portenta_H7_AsyncWebServer, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
 
-```
+```cpp
 Start Async_AdvancedWebServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
 Portenta_H7_AsyncTCP v1.4.0
-Portenta_H7_AsyncWebServer v1.3.0
+Portenta_H7_AsyncWebServer v1.4.2
 Connecting to SSID: HueNet1
 SSID: HueNet1
 Local IP Address: 192.168.2.94
@@ -251,7 +251,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.94
 You can access the Async Advanced WebServers at the displayed server IP, e.g. `192.168.2.94`
 
 <p align="center">
-    <img src="https://github.com/khoih-prog/Portenta_H7_AsyncTCP/blob/main/pics/Async_AdvancedWebServer_WiFi.png">
+    <img src="https://github.com/khoih-prog/Portenta_H7_AsyncTCP/raw/main/pics/Async_AdvancedWebServer_WiFi.png">
 </p>
 
 ---
@@ -261,10 +261,10 @@ You can access the Async Advanced WebServers at the displayed server IP, e.g. `1
 
 Following is the debug terminal when running example [AsyncHTTPRequest](https://github.com/khoih-prog/Portenta_H7_AsyncHTTPRequest/tree/main/examples/WiFi/AsyncHTTPRequest) on Portenta_H7 WiFi to demonstrate the operation of Portenta_H7_AsyncHTTPRequest, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
 
-```
+```cpp
 Start AsyncHTTPRequest on PORTENTA_H7_M7
 Portenta_H7_AsyncTCP v1.4.0
-Portenta_H7_AsyncHTTPRequest v1.4.0
+Portenta_H7_AsyncHTTPRequest v1.4.2
 Connecting to SSID: HueNet1
 SSID: HueNet1
 Local IP Address: 192.168.2.94
@@ -296,10 +296,10 @@ week_number: 41
 
 Following is the debug terminal when running example [AsyncHTTPRequest](https://github.com/khoih-prog/Portenta_H7_AsyncHTTPRequest/tree/main/examples/Ethernet/AsyncHTTPRequest) on Portenta_H7 Ethernet to demonstrate the operation of Portenta_H7_AsyncHTTPRequest, based on this [Portenta_H7_AsyncTCP Library](https://github.com/khoih-prog/Portenta_H7_AsyncTCP).
 
-```
+```cpp
 Start AsyncHTTPRequest on PORTENTA_H7_M7
 Portenta_H7_AsyncTCP v1.4.0
-Portenta_H7_AsyncHTTPRequest v1.4.0
+Portenta_H7_AsyncHTTPRequest v1.4.2
 Using mac index = 6
 Connected! IP address: 192.168.2.87
 Request sent
@@ -388,7 +388,7 @@ Submit issues to: [Portenta_H7_AsyncTCP issues](https://github.com/khoih-prog/Po
 4. Fix issue with slow browsers or network
 5. Remove hard-code if possible
 6. Improve debug messages by adding functions to display `error/state messages` instead of `cryptic error/state number`
-
+7. Use `allman` astyle
 
 ---
 ---
@@ -437,6 +437,6 @@ If you want to contribute to this project:
 
 ## Copyright
 
-Copyright 2021- Khoi Hoang
+Copyright (c) 2021- Khoi Hoang
 
 
